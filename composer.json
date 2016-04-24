@@ -12,11 +12,11 @@
   ],
   "require": {},
   "require-dev": {
-    "phpunit/phpunit": "4.0.*"
+    "phpunit/phpunit": "~5"
   },
   "autoload": {
     "psr-4": {
-      "MateuszBlaszczyk\\TcxToJson\\": "src"
+      "MateuszBlaszczyk\\TcxToJson\\": "src/MateuszBlaszczyk/TcxToJson"
     }
   }
 }
