@@ -1,5 +1,5 @@
 {
-  "name": "MateuszBlaszczyk/TcxToJson",
+  "name": "mateuszblaszczyk/tcx-to-json",
   "description": "It parses .tcx file to JSON",
   "license": "MIT",
   "keywords": [
