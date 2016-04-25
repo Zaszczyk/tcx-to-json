@@ -19,8 +19,35 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function testParse()
     {
         $parser = new Parser($this->xml);
-        $result = $parser->parse();
-        $this->assertEquals(true, $result);
+        $results = $parser->parse();
+        $this->assertEquals(34, count($results));
+
+        foreach ($results as $r) {
+            $this->assertEquals(4, count($r));
+        }
+
+        $this->assertArraySubset([
+            'latitude' => '51.77269923686981',
+            'longitude' => '19.422868251800537',
+            'altitude' => '202.18',
+            'timestamp' => '0'
+        ], $results[0]);
+
+        $this->assertArraySubset([
+            'latitude' => '51.77269923686981',
+            'longitude' => '19.422868251800537',
+            'altitude' => '202.18',
+            'timestamp' => '5'
+        ], $results[1]);
+
+        $this->assertArraySubset([
+            'latitude' => '51.772670200892854',
+            'longitude' => '19.422824995858328',
+            'altitude' => '202.08714285714288',
+            'timestamp' => '10'
+        ], $results[2]);
+
+
     }
 
     public function setXml()
