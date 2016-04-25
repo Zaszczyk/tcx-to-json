@@ -32,32 +32,33 @@ class Parser
         $xmlReader->xml($this->xml);
         $timestamp = $this->getStartTimestamp($xmlReader);
 
-        $item = [];
+        $trackpoint = new Trackpoint();
         while ($xmlReader->read()) {
             if ($xmlReader->nodeType == XMLReader::ELEMENT) {
                 switch ($xmlReader->name) {
                     case 'LatitudeDegrees':
                         $node = $xmlReader->expand();
-                        $item['latitude'] = $node->nodeValue;
+                        $trackpoint->latitude = $node->nodeValue;
                         break;
                     case 'LongitudeDegrees':
                         $node = $xmlReader->expand();
-                        $item['longitude'] = $node->nodeValue;
+                        $trackpoint->longitude = $node->nodeValue;
                         break;
                     case 'AltitudeMeters':
                         $node = $xmlReader->expand();
-                        $item['altitude'] = $node->nodeValue;
+                        $trackpoint->altitude = $node->nodeValue;
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
-                        $item['timestamp'] = strtotime($node->nodeValue) - $timestamp;
+                        $trackpoint->timestamp = strtotime($node->nodeValue) - $timestamp;
                         break;
                 }
             }
 
-            if (isset($item['latitude']) && isset($item['longitude']) && isset($item['altitude'])) {
-                $results[] = $item;
-                $item = [];
+            if ($trackpoint->isComplete()) {
+                $results[] = $trackpoint->serialize();
+                unset($trackpoint);
+                $trackpoint = new Trackpoint();
             }
         }
 
