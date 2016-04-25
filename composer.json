@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MateuszBlaszczyk\\TcxToJson\\": "src/MateuszBlaszczyk/TcxToJson"
+      "MateuszBlaszczyk\\TcxToJson\\": "src/"
     }
   }
 }
