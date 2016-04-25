@@ -64,6 +64,12 @@ class Parser
         return $results;
     }
 
+    public function getJson()
+    {
+        $results = $this->parse();
+        return json_encode($results);
+    }
+
     public function getStartTimestamp(XMLReader $xmlReader)
     {
         $timeString = false;

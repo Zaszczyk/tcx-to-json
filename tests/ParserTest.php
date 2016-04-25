@@ -14,6 +14,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->getXml1();
     }
 
+    public function getJson()
+    {
+        $parser = new Parser($this->getXml1());
+        $results = $parser->getJson();
+        $this->assertJson($results);
+    }
+    
     public function testParseXml1()
     {
         $parser = new Parser($this->getXml1());
