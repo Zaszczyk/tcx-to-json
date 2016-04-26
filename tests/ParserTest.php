@@ -32,23 +32,23 @@ class ParserTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertArraySubset([
-            'latitude' => '51.77269923686981',
-            'longitude' => '19.422868251800537',
+            'latitude' => '51.772699',
+            'longitude' => '19.422868',
             'altitude' => '202.18',
             'timestamp' => '0'
         ], $results[0]);
 
         $this->assertArraySubset([
-            'latitude' => '51.77269923686981',
-            'longitude' => '19.422868251800537',
+            'latitude' => '51.772699',
+            'longitude' => '19.422868',
             'altitude' => '202.18',
             'timestamp' => '5'
         ], $results[1]);
 
         $this->assertArraySubset([
-            'latitude' => '51.772670200892854',
-            'longitude' => '19.422824995858328',
-            'altitude' => '202.08714285714288',
+            'latitude' => '51.772670',
+            'longitude' => '19.422824',
+            'altitude' => '202.087142',
             'timestamp' => '10'
         ], $results[2]);
     }
@@ -65,33 +65,73 @@ class ParserTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertArraySubset([
-            'latitude' => '51.77265644073486',
-            'longitude' => '19.422962069511414',
+            'latitude' => '51.772656',
+            'longitude' => '19.422962',
             'altitude' => '284.01',
             'timestamp' => '0'
         ], $results[0]);
 
         $this->assertArraySubset([
-            'latitude' => '51.77265644073486',
-            'longitude' => '19.422962069511414',
+            'latitude' => '51.772656',
+            'longitude' => '19.422962',
             'altitude' => '284.01',
             'timestamp' => '5'
         ], $results[1]);
 
         $this->assertArraySubset([
-            'latitude' => '51.77265644073486',
-            'longitude' => '19.422962069511414',
+            'latitude' => '51.772656',
+            'longitude' => '19.422962',
             'altitude' => '284.01',
             'timestamp' => '9'
         ], $results[2]);
 
         $this->assertArraySubset([
-            'latitude' => '51.77294206619263',
-            'longitude' => '19.422948360443115',
+            'latitude' => '51.772942',
+            'longitude' => '19.422948',
             'altitude' => '193.75',
             'timestamp' => '45'
         ], $results[35]);
     }
+
+    public function testSubstrGPSCoordinateValid1()
+    {
+        $parser = new Parser($this->getXml2());
+        $result = $parser->substrGPSCoordinate('19.123456');
+        $this->assertEquals('19.123456', $result);
+    }
+
+
+    public function testSubstrGPSCoordinateValid2()
+    {
+        $parser = new Parser($this->getXml2());
+        $result = $parser->substrGPSCoordinate('19.1234567');
+        $this->assertEquals('19.123456', $result);
+    }
+
+
+    public function testSubstrGPSCoordinateValid3()
+    {
+        $parser = new Parser($this->getXml2());
+        $result = $parser->substrGPSCoordinate('192.123456');
+        $this->assertEquals('192.123456', $result);
+    }
+
+
+    public function testSubstrGPSCoordinateValid4()
+    {
+        $parser = new Parser($this->getXml2());
+        $result = $parser->substrGPSCoordinate('192.1234567');
+        $this->assertEquals('192.123456', $result);
+    }
+
+
+    public function testSubstrGPSCoordinateValid5()
+    {
+        $parser = new Parser($this->getXml2());
+        $result = $parser->substrGPSCoordinate('192.12');
+        $this->assertEquals('192.12', $result);
+    }
+
 
     public function getXml2()
     {
