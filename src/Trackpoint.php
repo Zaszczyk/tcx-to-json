@@ -19,9 +19,11 @@ class Trackpoint implements \Serializable
 
     public $timestamp;
 
+    public $distance;
+
     public function isComplete()
     {
-        if ($this->latitude && $this->longitude && $this->altitude) {
+        if ($this->latitude && $this->longitude && $this->altitude && isset($this->distance)) {
             return true;
         }
 
@@ -34,6 +36,7 @@ class Trackpoint implements \Serializable
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'altitude' => $this->altitude,
+            'distance' => $this->distance,
             'timestamp' => $this->timestamp,
         ];
     }
@@ -44,6 +47,7 @@ class Trackpoint implements \Serializable
         $item->latitude = $serialized['latitude'];
         $item->longitude = $serialized['longitude'];
         $item->altitude = $serialized['altitude'];
+        $item->distance = $serialized['distance'];
         $item->timestamp = $serialized['timestamp'];
 
         return $item;

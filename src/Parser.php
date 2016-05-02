@@ -17,6 +17,8 @@ class Parser
 
     protected $gpsAccuracy = 6;
 
+    protected $distanceAccuracy = 2;
+
     public function __construct($xml)
     {
         $this->xml = $xml;
@@ -37,6 +39,7 @@ class Parser
         $trackpoint = new Trackpoint();
         while ($xmlReader->read()) {
             if ($xmlReader->nodeType == XMLReader::ELEMENT) {
+
                 switch ($xmlReader->name) {
                     case 'LatitudeDegrees':
                         $node = $xmlReader->expand();
@@ -48,7 +51,13 @@ class Parser
                         break;
                     case 'AltitudeMeters':
                         $node = $xmlReader->expand();
-                        $trackpoint->altitude = $this->substrGPSCoordinate($node->nodeValue);;
+                        $trackpoint->altitude = $this->substrGPSCoordinate($node->nodeValue);
+                        break;
+                    case 'DistanceMeters':
+                        $node = $xmlReader->expand();
+                        if ($xmlReader->depth > 4) {
+                            $trackpoint->distance = $this->substrDistance($node->nodeValue);
+                        }
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
@@ -100,6 +109,17 @@ class Parser
         }
 
         return substr($value, 0, $dotPos + $this->gpsAccuracy + 1);
+    }
+
+    public function substrDistance($value)
+    {
+        $dotPos = strpos($value, '.');
+
+        if (!$dotPos) {
+            return $value;
+        }
+
+        return substr($value, 0, $dotPos + $this->distanceAccuracy + 1);
     }
 
 }
