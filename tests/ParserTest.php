@@ -53,7 +53,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset([
             'latitude' => '51.772670',
             'longitude' => '19.422824',
-            'altitude' => '202.087142',
+            'altitude' => '202.09',
             'distance' => '4.39',
             'timestamp' => '10'
         ], $results[2]);
@@ -98,76 +98,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
             'latitude' => '51.772942',
             'longitude' => '19.422948',
             'altitude' => '193.75',
-            'distance' => '369.17',
+            'distance' => '369.18',
             'timestamp' => '45'
         ], $results[35]);
-    }
-
-    public function testSubstrGPSCoordinateValid1()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrGPSCoordinate('19.123456');
-        $this->assertEquals('19.123456', $result);
-    }
-
-
-    public function testSubstrGPSCoordinateValid2()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrGPSCoordinate('19.1234567');
-        $this->assertEquals('19.123456', $result);
-    }
-
-
-    public function testSubstrGPSCoordinateValid3()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrGPSCoordinate('192.123456');
-        $this->assertEquals('192.123456', $result);
-    }
-
-
-    public function testSubstrGPSCoordinateValid4()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrGPSCoordinate('192.1234567');
-        $this->assertEquals('192.123456', $result);
-    }
-
-
-    public function testSubstrGPSCoordinateValid5()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrGPSCoordinate('192.12');
-        $this->assertEquals('192.12', $result);
-    }
-
-    public function testSubstrDistance1()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrDistance('0.0');
-        $this->assertEquals('0.0', $result);
-    }
-
-    public function testSubstrDistance2()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrDistance('0.00');
-        $this->assertEquals('0.00', $result);
-    }
-
-    public function testSubstrDistance3()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrDistance('0.000');
-        $this->assertEquals('0.000', $result);
-    }
-
-    public function testSubstrDistance4()
-    {
-        $parser = new Parser($this->getXml2());
-        $result = $parser->substrDistance('0.999');
-        $this->assertEquals('0.99', $result);
     }
 
     public function getXml1()

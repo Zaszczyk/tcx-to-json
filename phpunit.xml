@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="parser">
             <file>tests/ParserTest.php</file>
+            <file>tests/ValueTransformerTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -15,13 +15,12 @@ class Parser
 {
     protected $xml;
 
-    protected $gpsAccuracy = 6;
-
-    protected $distanceAccuracy = 2;
+    protected $vt;
 
     public function __construct($xml)
     {
         $this->xml = $xml;
+        $this->vt = new ValueTransformer();
     }
 
     public function parse()
@@ -43,25 +42,25 @@ class Parser
                 switch ($xmlReader->name) {
                     case 'LatitudeDegrees':
                         $node = $xmlReader->expand();
-                        $trackpoint->latitude = $this->substrGPSCoordinate($node->nodeValue);
+                        $trackpoint->latitude = $this->vt->substrGPSCoordinate($node->nodeValue);
                         break;
                     case 'LongitudeDegrees':
                         $node = $xmlReader->expand();
-                        $trackpoint->longitude = $this->substrGPSCoordinate($node->nodeValue);
+                        $trackpoint->longitude = $this->vt->substrGPSCoordinate($node->nodeValue);
                         break;
                     case 'AltitudeMeters':
                         $node = $xmlReader->expand();
-                        $trackpoint->altitude = $this->substrGPSCoordinate($node->nodeValue);
+                        $trackpoint->altitude = $this->vt->roundAltitude($node->nodeValue);
                         break;
                     case 'DistanceMeters':
                         $node = $xmlReader->expand();
                         if ($xmlReader->depth > 4) {
-                            $trackpoint->distance = $this->substrDistance($node->nodeValue);
+                            $trackpoint->distance = $this->vt->roundDistance($node->nodeValue);
                         }
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
-                        $trackpoint->timestamp = strtotime($node->nodeValue) - $timestamp;
+                        $trackpoint->timestamp = $this->vt->transformTime($node->nodeValue) - $timestamp;
                         break;
                 }
             }
@@ -96,30 +95,8 @@ class Parser
             return false;
         }
 
-        $timestamp = strtotime($timeString);
+        $timestamp = $this->vt->transformTime($timeString);
         return $timestamp;
-    }
-
-    public function substrGPSCoordinate($value)
-    {
-        $dotPos = strpos($value, '.');
-
-        if (!$dotPos) {
-            return $value;
-        }
-
-        return substr($value, 0, $dotPos + $this->gpsAccuracy + 1);
-    }
-
-    public function substrDistance($value)
-    {
-        $dotPos = strpos($value, '.');
-
-        if (!$dotPos) {
-            return $value;
-        }
-
-        return substr($value, 0, $dotPos + $this->distanceAccuracy + 1);
     }
 
 }
