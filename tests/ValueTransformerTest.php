@@ -77,7 +77,7 @@ class ValueTransformerTest extends PHPUnit_Framework_TestCase
     {
         $vt = new ValueTransformer();
         $result = $vt->roundDistance('0.999');
-        $this->assertEquals('1.00', $result);
+        $this->assertEquals('0.00100', $result);
     }
 
     public function testRoundDistance5()
@@ -91,7 +91,7 @@ class ValueTransformerTest extends PHPUnit_Framework_TestCase
     {
         $vt = new ValueTransformer();
         $result = $vt->roundDistance('8.969829090263627');
-        $this->assertEquals('8.97', $result);
+        $this->assertEquals('0.00897', $result);
     }
 
     public function testRoundAltitude1()

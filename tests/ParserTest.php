@@ -54,7 +54,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
             'latitude' => '51.772670',
             'longitude' => '19.422824',
             'altitude' => '202.09',
-            'distance' => '4.39',
+            'distance' => '0.00439',
             'timestamp' => '10'
         ], $results[2]);
     }
@@ -98,7 +98,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
             'latitude' => '51.772942',
             'longitude' => '19.422948',
             'altitude' => '193.75',
-            'distance' => '369.18',
+            'distance' => '0.36918',
             'timestamp' => '45'
         ], $results[35]);
     }
