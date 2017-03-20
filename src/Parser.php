@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Mateusz
- * Date: 24.04.2016
- * Time: 23:32
- */
-
 namespace MateuszBlaszczyk\TcxToJson;
-
 
 use XMLReader;
 
@@ -37,6 +29,7 @@ class Parser
 
         $trackpoint = new Trackpoint();
         while ($xmlReader->read()) {
+            $isDistance = false;
             if ($xmlReader->nodeType == XMLReader::ELEMENT) {
 
                 switch ($xmlReader->name) {
@@ -57,6 +50,7 @@ class Parser
                         if ($xmlReader->depth > 4) {
                             $trackpoint->distance = $this->vt->roundDistance($node->nodeValue);
                         }
+                        $isDistance = true;
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
@@ -65,7 +59,7 @@ class Parser
                 }
             }
 
-            if ($trackpoint->isComplete()) {
+            if ($trackpoint->isComplete() || $trackpoint->isCompleteWithoutDistance($isDistance, $results)) {
                 $results[] = $trackpoint->serialize();
                 unset($trackpoint);
                 $trackpoint = new Trackpoint();

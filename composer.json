@@ -1,5 +1,5 @@
 {
-  "name": "mateuszblaszczyk/tcx-to-json",
+  "name": "sm0nster/tcx-to-json",
   "description": "It parses .tcx file to JSON",
   "license": "MIT",
   "keywords": [
@@ -8,6 +8,9 @@
   "authors": [
     {
       "name": "Mateusz Blaszczyk"
+    },
+    {
+      "name": "Marcin Szymanski"
     }
   ],
   "require": {},

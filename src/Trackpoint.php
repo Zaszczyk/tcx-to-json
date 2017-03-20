@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Mateusz
- * Date: 25.04.2016
- * Time: 14:45
- */
-
 namespace MateuszBlaszczyk\TcxToJson;
-
 
 class Trackpoint implements \Serializable
 {
@@ -24,6 +16,22 @@ class Trackpoint implements \Serializable
     public function isComplete()
     {
         if ($this->latitude && $this->longitude && $this->altitude && isset($this->distance)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isCompleteWithoutDistance($isDistance, $results = [])
+    {
+        if ($this->latitude && $this->longitude && $this->altitude && $isDistance === false) {
+            if(count($results) == 0) {
+                $this->distance = 0;
+            } else {
+                $distanceCalculator = new DistanceCalculator();
+                $lastTrackpoint = $this->unserialize(end($results));
+                $this->distance = $distanceCalculator->countDistanceBetween2Trackpoints($this, $lastTrackpoint);
+            }
             return true;
         }
 
