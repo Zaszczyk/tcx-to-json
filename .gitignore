@@ -9,3 +9,4 @@ fitbit.tcx
 # composer.lock
 
 # Created by .ignore support plugin (hsz.mobi)
+/phpunit.phar
