@@ -135,6 +135,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         ], $results[2]);
 
         $this->assertEquals(0.00442, round($results[2]['distance'], 5));
+        $this->assertEquals(0.01593, round(end($results)['distance'], 5));
     }
 
     public function getXml1()
