@@ -38,7 +38,7 @@ class Trackpoint implements \Serializable
         } else {
             $distanceCalculator = new DistanceCalculator();
             $lastTrackpoint = $this->unserialize(end($results));
-            $this->distance = $distanceCalculator->countDistanceBetween2Trackpoints($this, $lastTrackpoint);
+            $this->distance = $lastTrackpoint->distance + $distanceCalculator->countDistanceBetween2Trackpoints($this, $lastTrackpoint);
         }
     }
 
