@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Mateusz
- * Date: 24.04.2016
- * Time: 23:32
- */
-
 namespace MateuszBlaszczyk\TcxToJson;
-
 
 use XMLReader;
 
@@ -17,6 +9,8 @@ class Parser
 
     protected $vt;
 
+    protected $results = [];
+
     public function __construct($xml)
     {
         $this->xml = $xml;
@@ -25,7 +19,7 @@ class Parser
 
     public function parse()
     {
-        $results = [];
+        $this->results = [];
 
         /**
          * {"altitude":112.5,"latitude":52.231231,"type":"start","timestamp":0,"longitude":21.011354}
@@ -42,14 +36,26 @@ class Parser
                 switch ($xmlReader->name) {
                     case 'LatitudeDegrees':
                         $node = $xmlReader->expand();
+                        if ($trackpoint->latitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                            $trackpoint->calculateDistance($this->results);
+                            $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+                        }
                         $trackpoint->latitude = $this->vt->substrGPSCoordinate($node->nodeValue);
                         break;
                     case 'LongitudeDegrees':
                         $node = $xmlReader->expand();
+                        if ($trackpoint->longitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                            $trackpoint->calculateDistance($this->results);
+                            $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+                        }
                         $trackpoint->longitude = $this->vt->substrGPSCoordinate($node->nodeValue);
                         break;
                     case 'AltitudeMeters':
                         $node = $xmlReader->expand();
+                        if ($trackpoint->altitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                            $trackpoint->calculateDistance($this->results);
+                            $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+                        }
                         $trackpoint->altitude = $this->vt->roundAltitude($node->nodeValue);
                         break;
                     case 'DistanceMeters':
@@ -60,19 +66,32 @@ class Parser
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
+                        if ($trackpoint->timestamp !== null && $trackpoint->isCompleteWithoutDistance()) {
+                            $trackpoint->calculateDistance($this->results);
+                            $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+                        }
                         $trackpoint->timestamp = $this->vt->transformTime($node->nodeValue) - $timestamp;
                         break;
                 }
-            }
-
-            if ($trackpoint->isComplete()) {
-                $results[] = $trackpoint->serialize();
-                unset($trackpoint);
-                $trackpoint = new Trackpoint();
+                if ($trackpoint->isComplete()) {
+                    $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+                }
             }
         }
 
-        return $results;
+        if($trackpoint->isCompleteWithoutDistance()) {
+            $trackpoint->calculateDistance($this->results);
+            $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
+        }
+
+        return $this->results;
+    }
+
+    private function storeTrackpointAndGetNew(Trackpoint $trackpoint)
+    {
+        $this->results[] = $trackpoint->serialize();
+        unset($trackpoint);
+        return new Trackpoint();
     }
 
     public function getJson()
@@ -98,5 +117,4 @@ class Parser
         $timestamp = $this->vt->transformTime($timeString);
         return $timestamp;
     }
-
 }
