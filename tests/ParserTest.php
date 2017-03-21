@@ -1,12 +1,7 @@
 <?php
 use MateuszBlaszczyk\TcxToJson\Parser;
 
-/**
- * Created by PhpStorm.
- * User: Mateusz
- * Date: 25.04.2016
- * Time: 00:08
- */
+
 class ParserTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -110,7 +105,6 @@ class ParserTest extends PHPUnit_Framework_TestCase
     {
         $parser = new Parser($this->getXml3());
         $results = $parser->parse();
-//        var_dump($results);
         $this->assertEquals(34, count($results));
 
         foreach ($results as $r) {
@@ -133,7 +127,6 @@ class ParserTest extends PHPUnit_Framework_TestCase
             'timestamp' => '5'
         ], $results[1]);
 
-        var_dump($results[2]);
         $this->assertArraySubset([
             'latitude' => '51.772670',
             'longitude' => '19.422824',
