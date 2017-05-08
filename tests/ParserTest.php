@@ -469,6 +469,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
 </TrainingCenterDatabase>';
     }
 
+
     public function getXml2()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>
