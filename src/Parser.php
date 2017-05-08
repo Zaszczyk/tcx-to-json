@@ -1,4 +1,5 @@
 <?php
+
 namespace MateuszBlaszczyk\TcxToJson;
 
 use XMLReader;
@@ -17,7 +18,7 @@ class Parser
         $this->vt = new ValueTransformer();
     }
 
-    public function parse()
+    public function parse($obligatoryAltitude = true)
     {
         $this->results = [];
 
@@ -36,7 +37,7 @@ class Parser
                 switch ($xmlReader->name) {
                     case 'LatitudeDegrees':
                         $node = $xmlReader->expand();
-                        if ($trackpoint->latitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                        if ($trackpoint->latitude !== null && $trackpoint->isCompleteWithoutDistance($obligatoryAltitude)) {
                             $trackpoint->calculateDistance($this->results);
                             $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
                         }
@@ -44,7 +45,7 @@ class Parser
                         break;
                     case 'LongitudeDegrees':
                         $node = $xmlReader->expand();
-                        if ($trackpoint->longitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                        if ($trackpoint->longitude !== null && $trackpoint->isCompleteWithoutDistance($obligatoryAltitude)) {
                             $trackpoint->calculateDistance($this->results);
                             $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
                         }
@@ -52,7 +53,7 @@ class Parser
                         break;
                     case 'AltitudeMeters':
                         $node = $xmlReader->expand();
-                        if ($trackpoint->altitude !== null && $trackpoint->isCompleteWithoutDistance()) {
+                        if ($trackpoint->altitude !== null && $trackpoint->isCompleteWithoutDistance($obligatoryAltitude)) {
                             $trackpoint->calculateDistance($this->results);
                             $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
                         }
@@ -66,20 +67,20 @@ class Parser
                         break;
                     case 'Time':
                         $node = $xmlReader->expand();
-                        if ($trackpoint->timestamp !== null && $trackpoint->isCompleteWithoutDistance()) {
+                        if ($trackpoint->timestamp !== null && $trackpoint->isCompleteWithoutDistance($obligatoryAltitude)) {
                             $trackpoint->calculateDistance($this->results);
                             $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
                         }
                         $trackpoint->timestamp = $this->vt->transformTime($node->nodeValue) - $timestamp;
                         break;
                 }
-                if ($trackpoint->isComplete()) {
+                if ($trackpoint->isComplete($obligatoryAltitude)) {
                     $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
                 }
             }
         }
 
-        if($trackpoint->isCompleteWithoutDistance()) {
+        if ($trackpoint->isCompleteWithoutDistance($obligatoryAltitude)) {
             $trackpoint->calculateDistance($this->results);
             $trackpoint = $this->storeTrackpointAndGetNew($trackpoint);
         }
